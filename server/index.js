@@ -14,8 +14,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.get('/api/messages', async (req, res) => {
+  const { limit = 10, offset = 0 } = req.query; 
+
   try {
     const messages = await prisma.message.findMany({
+      skip: parseInt(offset),
+      take: parseInt(limit),
       orderBy: { timestamp: 'desc' },
       include: {
         replies: {
@@ -25,7 +29,8 @@ app.get('/api/messages', async (req, res) => {
         }
       }
     });
-    res.json(messages);
+
+    res.json({ messages });
   } catch (error) {
     console.error('Error fetching messages:', error);
     res.status(500).json({ error: 'Failed to fetch messages' });
