@@ -37,7 +37,9 @@ const MessageList = ({ onSelectMessage, selectedMessageId }) => {
 
   const filteredMessages = messages.filter(message => {
     const searchTerm = searchFilter.toLowerCase();
+    const isPriority = /\bloan\b/i.test(message.content) || /\bcredit\b/i.test(message.content);
     return (
+      isPriority ||
       message.customerName.toLowerCase().includes(searchTerm) ||
       message.content.toLowerCase().includes(searchTerm) ||
       (Array.isArray(message.replies) && message.replies.some(reply => 
@@ -98,9 +100,17 @@ const MessageList = ({ onSelectMessage, selectedMessageId }) => {
               <div className="flex justify-between items-start">
                 <div className="font-bold">{message.customerName}</div>
                 <div className={`text-xs px-2 py-1 rounded ${
-                  message.replies?.length ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  /\bloan\b/i.test(message.content) || /\bcredit\b/i.test(message.content)
+                    ? 'bg-red-100 text-red-800'
+                    : message.replies?.length
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-yellow-100 text-yellow-800'
                 }`}>
-                  {message.replies?.length ? 'Replied' : 'New'}
+                  {/\bloan\b/i.test(message.content) || /\bcredit\b/i.test(message.content)
+                    ? 'Priority'
+                    : message.replies?.length
+                      ? 'Replied'
+                      : 'New'}
                 </div>
               </div>
               <div className="text-sm text-gray-600 mt-1">
