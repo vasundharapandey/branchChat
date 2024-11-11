@@ -28,4 +28,5 @@ model Reply {
   timestamp DateTime @default(now())
   message   Message  @relation(fields: [messageId], references: [id])
   messageId Int
+  repliedBy String @default("Unknown") 
 }

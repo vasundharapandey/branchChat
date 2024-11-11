@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
@@ -13,6 +12,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
 app.get('/api/messages', async (req, res) => {
   const { limit = 20, page = 1 } = req.query;
   const parsedLimit = parseInt(limit);
@@ -20,7 +20,6 @@ app.get('/api/messages', async (req, res) => {
   const offset = (parsedPage - 1) * parsedLimit;
 
   try {
-   
     const totalCount = await prisma.message.count();
 
     if (totalCount === 0) {
@@ -31,8 +30,8 @@ app.get('/api/messages', async (req, res) => {
         totalPages: 1
       });
     }
+
     const totalPages = Math.max(1, Math.ceil(totalCount / parsedLimit));
-    
     const validatedPage = Math.min(Math.max(1, parsedPage), totalPages);
 
     const messages = await prisma.message.findMany({
@@ -59,18 +58,20 @@ app.get('/api/messages', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch messages' });
   }
 });
+
 app.post('/api/messages/:id/reply', async (req, res) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
-    
+    const { content, agentName } = req.body;
+
     const reply = await prisma.reply.create({
       data: {
         content,
         messageId: parseInt(id),
-      },
+        repliedBy: agentName
+      }
     });
-    
+
     res.json(reply);
   } catch (error) {
     console.error('Error creating reply:', error);
@@ -78,15 +79,14 @@ app.post('/api/messages/:id/reply', async (req, res) => {
   }
 });
 
-
 app.post('/api/messages', async (req, res) => {
   try {
     const { customerName, content } = req.body;
     const message = await prisma.message.create({
       data: {
         customerName,
-        content,
-      },
+        content
+      }
     });
     res.json(message);
   } catch (error) {

@@ -52,6 +52,7 @@ const AgentDashboard = () => {
         <MessageDetail
           message={selectedMessage}
           onClose={() => setSelectedMessage(null)}
+          agentName={agentName}
         />
       </div>
     </div>
