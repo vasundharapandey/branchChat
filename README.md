@@ -23,15 +23,10 @@ Follow these steps to set up and run the project locally:
 
 ### 1. Clone the Repository
 
-```bash
-git clone https://github.com/your-username/message-management-system.git
-```
 
 ### 2. Navigate to Project Directory
 
-```bash
-cd message-management-system
-```
+
 
 ### 3. Install Dependencies
 
@@ -60,8 +55,10 @@ npm install
 ```bash
 npm run dev
 ```
-
-By default, the server runs on `http://localhost:3000`.
+Also to run backend
+```bash
+npm run server
+```
 
 ## API Endpoints
 
@@ -78,9 +75,7 @@ By default, the server runs on `http://localhost:3000`.
 3. Use the reply feature to respond to messages directly.
 4. Utilize filters and quick reply options for efficient management.
 
-## Contributing
 
-Contributions are welcome! Here’s how you can help:
 
 - **Reporting Issues**: Identify and report any bugs or feature requests.
 - **Code Contributions**: Submit pull requests with improvements or new features.
